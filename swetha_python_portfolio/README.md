@@ -17,3 +17,6 @@ Import this folder into Vercel as a static site, or deploy the repository with t
 - Personal reflection supplied by the user
 
 The dashboard graphic in the project section is illustrative; it is not live application data.
+
+
+Project details: https://drive.google.com/drive/folders/1z5MihNdbFZP5xLJRVMVasUDizMP0C1IF
