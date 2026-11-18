@@ -1,0 +1,186 @@
+Slide 1
+PLATFORM PRESENTATION
+LogHealth: Log Analytics & System Health Intelligence
+
+Transforming Application Logs into Actionable Insights About Reliability, Anomalies & System Behavior
+Architectural Overview & Implementation Walkthrough   •   Swetha   •   2026
+Live Deployment: https://error-insight-ruddy.vercel.app/
+TECH STACK  Python   Flask   SQLite   Chart.js   HTML5/CSS3   Vercel
+LOGHEALTH: SYSTEM HEALTH INTELLIGENCE   |   SWETHA • 2026
+01
+
+Slide 2
+EXECUTIVE SUMMARY
+The Paradigm Shift: From Error Fixing to Health Intelligence
+The Challenge
+Traditional log parsers treat logs as disconnected text snippets or isolated stack traces. They lack context regarding subsystem stability, failure concentration, or historical degradation.
+The LogHealth Solution
+An observability intelligence engine that converts log streams into an explainable 0–100 System Health Score, tracks subsystem failure rates, detects statistical anomalies, and prioritizes operational risks.
+Strict Architecture Preservation
+Evolved without rebuilding or rewriting. Preserved Flask backend, SQLite repository abstraction, legacy JSON endpoints, Vercel serverless compatibility, and passing 20/20 automated unit tests.
+TECH STACK  Python   Flask   SQLite   Chart.js   HTML5/CSS3   Vercel
+LOGHEALTH: SYSTEM HEALTH INTELLIGENCE   |   SWETHA • 2026
+02
+
+Slide 3
+SYSTEM ARCHITECTURE
+Data Flow: Ingestion to System Health Intelligence
+1. Multi-Format Ingestion
+Accepts JSON Format A ('errors' array), Format B (flat array), Syslog, Apache/Nginx web logs, and raw exceptions. Enforces SHA256 idempotency deduplication.
+2. Subsystem Classifier
+Categorizes logs into 9 identifiable components (API, Database, Auth, Network, Jobs, Infra, Memory, Filesystem, Application). Normalizes severities.
+3. Analytical Intelligence
+Calculates evidence-based Health Score (0-100), statistical z-score volume spikes, burst anomalies, subsystem failure rates, and historical baseline delta %.
+4. Reporting & UI Console
+Serves 10 dedicated observability views, reactive Chart.js dashboards, and generates 10-section executive reports via JSON and Markdown export.
+TECH STACK  Python   Flask   SQLite   Chart.js   HTML5/CSS3   Vercel
+LOGHEALTH: SYSTEM HEALTH INTELLIGENCE   |   SWETHA • 2026
+03
+
+Slide 4
+THE PROJECT
+LogHealth the Python Way
+MAIN MODULES AND THEIR ROLES
+🧠
+01
+services/
+The Intelligence Engine
+Core business logic: health scoring (0-100), statistical anomaly detection, component risk ranking, and executive reporting.
+🗄️
+02
+database/
+The Persistence Layer
+DatabaseManager abstraction and SQLiteManager with indexed tables (error_logs), parameterized queries, and WAL mode.
+🌐
+03
+routes/
+The API & Routing Layer
+Flask blueprints for REST ingestion (/api/logs), analytical queries (/api/analytics), executive reports, and web views.
+📊
+04
+static/
+The Visual & Reactive Assets
+Cyber command-center styling (dashboard.css), reactive UI state controller (dashboard.js), and Chart.js visualizations.
+💻
+05
+templates/
+The User Interface
+Semantic responsive layout (index.html) featuring 10 dedicated observability views, health score gauge, and formula modal.
+▶️
+06
+app.py
+The Director & Entry Point
+Application factory entry point. Initializes Flask, database schema, blueprint routes, logging, and WSGI serverless export.
+⚙️
+07
+config.py
+Config & Environment
+Dynamic environment resolver, API security keys, and auto-switching serverless storage fallback (/tmp for Vercel).
+🛡️
+08
+tests/
+The Verification Suite
+Comprehensive 20-test automated suite verifying health scoring, component ranking, anomaly detection, and idempotency.
+TECH STACK  Python   Flask   SQLite   Chart.js   HTML5/CSS3   Vercel
+LOGHEALTH: SYSTEM HEALTH INTELLIGENCE   |   SWETHA • 2026
+04
+
+Slide 5
+HEALTH SCORING
+Evidence-Based System Health Scoring (0–100)
+Mathematical Formulation
+RawPenalty = (12 * N_critical + 4 * N_error + 1.5 * N_warning) * DensityWeightTotalPenalty = RawPenalty + AnomalyPenalty + ConcentrationPenaltyHealthScore = max(0, min(100, round(100 - TotalPenalty)))
+Contributing Factors:
+• Severity Weights: Critical (12 pts), Error (4 pts), Warning (1.5 pts)
+• Issue Density: Multiplied by (N_issues / N_total) to scale with volume
+• Anomaly Penalty: +5 to +10 pts when volume spikes or bursts occur
+• Concentration Penalty: +5 pts if >65% failures hit a single subsystem
+• Data Caveat: Shows explicit 'Insufficient Data' state if 0 records exist
+System Health Status Tiers
+[90 – 100] EXCELLENT: System healthy; minimal warnings; optimal operation.
+[75 – 89] GOOD: Normal operational load; isolated errors handled gracefully.
+[50 – 74] FAIR: Elevated warning/error rates; targeted investigation needed.
+[25 – 49] DEGRADED: High failure density or recurring critical events.
+[0 – 24] CRITICAL: Cascading subsystem failures; immediate intervention required.
+[N/A] INSUFFICIENT DATA: Provisional state when 0 logs exist; no fabricated numbers.
+TECH STACK  Python   Flask   SQLite   Chart.js   HTML5/CSS3   Vercel
+LOGHEALTH: SYSTEM HEALTH INTELLIGENCE   |   SWETHA • 2026
+05
+
+Slide 6
+ANALYTICS & RISKS
+Subsystem Tracking & Statistical Anomaly Detection
+Component Risk Ranking
+Logs mapped to 9 distinct components:• API & Backend• Database & Storage• Authentication & Security• Network & Gateways• Background Jobs & Workers• Infrastructure & System• Memory & GC• File System• Application CoreEach ranked by failure rate %, event volume, and relative risk score.
+Statistical Anomaly Engine
+Detects true anomalies without ML bloat:1. Volume Spikes (Z-Score):Flags time buckets where event count exceeds mean + 1.5 * standard deviation.2. Critical Bursts:Identifies velocity clusters of high-severity failures.3. Concentration Risks:Alerts when >65% of failures isolate to a single subsystem.
+Historical Comparisons
+Compares active sessions against stored baselines:• Volume Delta % (+/-)• Newly Emerged Error Signatures• Resolved Error SignaturesAllows DevOps teams to immediately determine whether recent deployments caused degradation or stability improvements.
+TECH STACK  Python   Flask   SQLite   Chart.js   HTML5/CSS3   Vercel
+LOGHEALTH: SYSTEM HEALTH INTELLIGENCE   |   SWETHA • 2026
+06
+
+Slide 7
+INTEGRATION & REPORTS
+Comprehensive REST API & Executive Health Reporting
+POST /api/logs
+Automated log ingestion with X-API-Key auth, Format A/B support, and SHA256 duplicate deduplication.
+GET /api/analytics
+Calculates real-time health score, component metrics, anomalies, and Chart.js datasets.
+GET /api/report
+Generates 10-section executive health report as JSON or downloadable Markdown (?format=markdown&download=1).
+POST /api/analyze
+Multipart file upload (.json, .log, .txt) with in-memory analysis and baseline comparison.
+GET /api/history
+Audit trail with timestamp ranges, component filtering, and pagination.
+GET /api/health
+Liveness probe reporting database connectivity, engine version, and stored records.
+TECH STACK  Python   Flask   SQLite   Chart.js   HTML5/CSS3   Vercel
+LOGHEALTH: SYSTEM HEALTH INTELLIGENCE   |   SWETHA • 2026
+07
+
+Slide 8
+CLOUD INFRASTRUCTURE
+Vercel Serverless Architecture & Storage Compatibility
+Ephemeral Storage Protection
+Vercel Serverless runs on a read-only filesystem except for /tmp.LogHealth dynamically inspects the environment (VERCEL=1) and initializes SQLite inside tempfile.gettempdir() (/tmp/loghealth.db), completely eliminating read-only crashes.
+Durable Database Abstraction
+Built on the DatabaseManager repository pattern.Allows production environments to effortlessly connect external PostgreSQL databases (Supabase, Neon, Railway) simply by setting DATABASE_PATH in Vercel settings, without any application code rewrite.
+Zero-Dependency Frontend
+Built entirely on Vanilla HTML5, CSS3, and JavaScript.Zero Node build step or npm bundle bloat on Vercel. Static assets are served instantly via edge CDN with Chart.js loaded asynchronously for ultra-fast Time to Interactive (TTI).
+TECH STACK  Python   Flask   SQLite   Chart.js   HTML5/CSS3   Vercel
+LOGHEALTH: SYSTEM HEALTH INTELLIGENCE   |   SWETHA • 2026
+08
+
+Slide 9
+QUALITY ASSURANCE
+Automated Test Suite: 20/20 Passing Tests
+20 Tests Passing (100%)
+• Execution Time: 1.88s deterministic
+• Isolated Temp SQLite DB per test
+• Zero Mock Data in production tests
+• Preserved all 14 legacy tests
+• Added 6 intelligence suite tests
+• Verified clean Vercel WSGI packaging
+Coverage Verification Matrix
+Ingestion & Formats: Tests 03, 04, 05, 06: JSON Format A/B, Syslog, raw text, and error validation.
+Deduplication & Security: Tests 11, 12, 13: X-API-Key auth, SHA256 idempotency hash, and parser client.
+Persistence & Abstraction: Tests 01, 08, 09, 14: DatabaseManager persistence, schema init, and search filters.
+Health Scoring & Components: Tests 10, 15, 16: Explainable score bounds (0-100), penalties, and risk levels.
+Anomalies, Baselines & Reports: Tests 17, 18, 19, 20: Z-score spikes, baseline delta %, and /api/report generator.
+TECH STACK  Python   Flask   SQLite   Chart.js   HTML5/CSS3   Vercel
+LOGHEALTH: SYSTEM HEALTH INTELLIGENCE   |   SWETHA • 2026
+09
+
+Slide 10
+CONCLUSION
+Summary of Deliverables & Future Expansion
+Completed Deliverables
+• Fully transformed code repository• Explainable Health Scoring Engine• 10-view reactive web console• Executive Markdown/JSON reports• 20 passing unit tests• Comprehensive README & API docs• Packaged LogHealth_Project.zip
+Production Status
+• GitHub: main branch up-to-date  https://github.com/swethav2023e-png/Error_insight_-• Vercel Live Deployment:  https://error-insight-ruddy.vercel.app/• Live /api/health responding healthy• Ephemeral /tmp fallback verified
+Future Roadmap
+• Standalone LogScope collector integration• PostgreSQL/Supabase multi-tenant DB• Automated Slack / PagerDuty webhooks• Custom retention policies & archiving• Advanced log stream anomaly baselining
+TECH STACK  Python   Flask   SQLite   Chart.js   HTML5/CSS3   Vercel
+LOGHEALTH: SYSTEM HEALTH INTELLIGENCE   |   SWETHA • 2026
+10
